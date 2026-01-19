@@ -1,0 +1,22 @@
+[
+  {"id": 1, "name": "Houston", "population": 2304580, "state": "TX", "lat": 29.7604, "lon": -95.3698},
+  {"id": 2, "name": "San Antonio", "population": 1547253, "state": "TX", "lat": 29.4241, "lon": -98.4936},
+  {"id": 3, "name": "Dallas", "population": 1304379, "state": "TX", "lat": 32.7767, "lon": -96.7970},
+  {"id": 4, "name": "Austin", "population": 978908, "state": "TX", "lat": 30.2672, "lon": -97.7431},
+  {"id": 5, "name": "Fort Worth", "population": 909585, "state": "TX", "lat": 32.7555, "lon": -97.3308},
+  {"id": 6, "name": "El Paso", "population": 681728, "state": "TX", "lat": 31.7619, "lon": -106.4850},
+  {"id": 7, "name": "Arlington", "population": 398854, "state": "TX", "lat": 32.7357, "lon": -97.1081},
+  {"id": 8, "name": "Corpus Christi", "population": 326586, "state": "TX", "lat": 27.8006, "lon": -97.3964},
+  {"id": 9, "name": "Plano", "population": 287677, "state": "TX", "lat": 33.0198, "lon": -96.6989},
+  {"id": 10, "name": "Laredo", "population": 261639, "state": "TX", "lat": 27.5306, "lon": -99.4803},
+  {"id": 11, "name": "Lubbock", "population": 258862, "state": "TX", "lat": 33.5779, "lon": -101.8552},
+  {"id": 12, "name": "Garland", "population": 239928, "state": "TX", "lat": 32.9126, "lon": -96.6389},
+  {"id": 13, "name": "Irving", "population": 239798, "state": "TX", "lat": 32.8140, "lon": -96.9489},
+  {"id": 14, "name": "Frisco", "population": 200509, "state": "TX", "lat": 33.1507, "lon": -96.8236},
+  {"id": 15, "name": "McKinney", "population": 195308, "state": "TX", "lat": 33.1972, "lon": -96.6397},
+  {"id": 16, "name": "Brownsville", "population": 183392, "state": "TX", "lat": 25.9017, "lon": -97.4975},
+  {"id": 17, "name": "Killeen", "population": 153095, "state": "TX", "lat": 31.1171, "lon": -97.7278},
+  {"id": 18, "name": "Pasadena", "population": 151950, "state": "TX", "lat": 29.6911, "lon": -95.2091},
+  {"id": 19, "name": "McAllen", "population": 142210, "state": "TX", "lat": 26.2034, "lon": -98.2300},
+  {"id": 20, "name": "Amarillo", "population": 199826, "state": "TX", "lat": 35.2220, "lon": -101.8313}
+]
