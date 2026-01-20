@@ -1,151 +1,302 @@
-# Lab 01: Binary Search
+# Lab 1: Introduction to Algorithms - Binary Search
 
-## Overview
-In this lab, you will implement two fundamental search algorithms: **Linear Search** and **Binary Search**. These algorithms are covered in Chapter 1 of "Grokking Algorithms."
+## 1. Introduction and Objectives
 
-## Learning Objectives
-- Understand the difference between O(n) and O(log n) time complexity
-- Implement linear search for unsorted data
-- Implement binary search for sorted data
-- Compare the efficiency of both algorithms
+### Overview
+Implement linear search and binary search algorithms in Python using a dataset of Texas cities. Compare their performance to understand Big O notation.
 
-## Background
+### Learning Objectives
+- Implement linear and binary search in Python
+- Measure algorithm performance using the `time` module
+- Analyze efficiency using Big O notation
+- Work with JSON data and Python file I/O
+
+### Prerequisites
+- Read Chapter 1 in "Grokking Algorithms" (pages 3-19)
+- Basic programming knowledge (functions, lists, dictionaries)
+
+---
+
+## 2. Algorithm Background
 
 ### Linear Search - O(n)
-Linear search checks each element one by one until it finds the target or reaches the end. It works on any list but can be slow for large datasets.
-
-### Binary Search - O(log n)
-Binary search uses divide and conquer on **sorted** data:
-1. Check the middle element
-2. If it's the target, done!
-3. If target is smaller, search the left half
-4. If target is larger, search the right half
-5. Repeat until found or no elements left
-
-**Key insight**: Binary search eliminates half the remaining elements with each comparison.
-
----
-
-## Complete Solutions
-
-### Task 1: `linear_search()` - Complete Implementation
-
-```python
-def linear_search(items: List[Dict], target_name: str) -> Tuple[Optional[Dict], int]:
-    """
-    Search for an item by name using linear search.
-    
-    Args:
-        items: List of dictionaries with 'name' key
-        target_name: Name to search for (case-insensitive)
-    
-    Returns:
-        Tuple of (found item or None, number of comparisons)
-    
-    Time Complexity: O(n)
-    """
-    comparisons = 0
-    target_lower = target_name.lower()
-    
-    for item in items:
-        comparisons += 1
-        if item["name"].lower() == target_lower:
-            return (item, comparisons)
-    
-    return (None, comparisons)
+Check each element one by one until found.
+```
+Best case: O(1) - first element
+Worst case: O(n) - last element or not found
 ```
 
-**How it works:**
-1. Convert target to lowercase for case-insensitive comparison
-2. Loop through each item in the list
-3. Increment the comparison counter for each item checked
-4. If the item's name matches (case-insensitive), return the item and count
-5. If we reach the end without finding it, return `(None, comparisons)`
+### Binary Search - O(log n)
+Divide sorted list in half repeatedly.
+```
+Best case: O(1) - middle element
+Worst case: O(log n) - requires sorted data
+```
+
+### Why It Matters
+For 1 million items:
+- Linear Search: up to 1,000,000 comparisons
+- Binary Search: at most 20 comparisons!
 
 ---
 
-### Task 2: `binary_search()` - Complete Implementation
+## 3. Project Structure
+
+```
+lab01_binary_search/
+├── search.py      # Search algorithm implementations
+├── main.py        # Main program
+└── README.md      # Your lab report
+```
+
+---
+
+## 4. Step-by-Step Implementation
+
+### Step 1: Create `search.py`
 
 ```python
-def binary_search(sorted_items: List[Dict], target_name: str) -> Tuple[Optional[Dict], int]:
+"""
+Lab 1: Search Algorithms
+Implements linear and binary search for city data.
+"""
+import time
+from typing import Dict, List, Optional
+
+
+def linear_search(cities: List[Dict], target_name: str) -> Optional[Dict]:
     """
-    Search for an item by name using binary search.
-    REQUIRES: sorted_items must be sorted alphabetically by name!
+    Perform linear search for a city by name.
+    Time Complexity: O(n)
     
     Args:
-        sorted_items: List of dictionaries sorted by 'name' key
-        target_name: Name to search for (case-insensitive)
+        cities: List of city dictionaries
+        target_name: City name to find
     
     Returns:
-        Tuple of (found item or None, number of comparisons)
-    
-    Time Complexity: O(log n)
+        City dict if found, None otherwise
     """
+    start_time = time.time()
     comparisons = 0
+    
+    for city in cities:
+        comparisons += 1
+        if city['name'].lower() == target_name.lower():
+            elapsed = (time.time() - start_time) * 1000
+            print(f"Linear Search: Found in {comparisons} comparisons ({elapsed:.4f} ms)")
+            return city
+    
+    elapsed = (time.time() - start_time) * 1000
+    print(f"Linear Search: Not found after {comparisons} comparisons ({elapsed:.4f} ms)")
+    return None
+
+
+def binary_search(cities: List[Dict], target_name: str) -> Optional[Dict]:
+    """
+    Perform binary search for a city by name.
+    Time Complexity: O(log n)
+    REQUIRES: cities list must be sorted by name!
+    
+    Args:
+        cities: Sorted list of city dictionaries
+        target_name: City name to find
+    
+    Returns:
+        City dict if found, None otherwise
+    """
+    start_time = time.time()
+    comparisons = 0
+    
     left = 0
-    right = len(sorted_items) - 1
+    right = len(cities) - 1
     target_lower = target_name.lower()
     
     while left <= right:
-        mid = (left + right) // 2
         comparisons += 1
-        
-        mid_name = sorted_items[mid]["name"].lower()
+        mid = (left + right) // 2
+        mid_name = cities[mid]['name'].lower()
         
         if mid_name == target_lower:
-            return (sorted_items[mid], comparisons)
+            elapsed = (time.time() - start_time) * 1000
+            print(f"Binary Search: Found in {comparisons} comparisons ({elapsed:.4f} ms)")
+            return cities[mid]
         elif mid_name < target_lower:
-            left = mid + 1  # Search right half
+            left = mid + 1
         else:
-            right = mid - 1  # Search left half
+            right = mid - 1
     
-    return (None, comparisons)
+    elapsed = (time.time() - start_time) * 1000
+    print(f"Binary Search: Not found after {comparisons} comparisons ({elapsed:.4f} ms)")
+    return None
 ```
 
-**How it works:**
-1. Initialize `left` to 0 and `right` to the last index
-2. Convert target to lowercase for case-insensitive comparison
-3. While `left <= right` (there's still a range to search):
-   - Calculate the middle index: `mid = (left + right) // 2`
-   - Increment the comparison counter
-   - Compare the middle item's name with the target:
-     - If equal: found it! Return the item and count
-     - If middle < target: target is in the right half, so `left = mid + 1`
-     - If middle > target: target is in the left half, so `right = mid - 1`
-4. If the loop ends without finding, return `(None, comparisons)`
-
----
-
-## Example Usage
+### Step 2: Create `main.py`
 
 ```python
-# Sample data
-cities = [
-    {"name": "Austin", "population": 964254},
-    {"name": "Dallas", "population": 1304379},
-    {"name": "Houston", "population": 2304580},
-    {"name": "San Antonio", "population": 1547253}
-]
+"""
+Lab 1: Main Program
+Demonstrates linear vs binary search on city data.
+"""
+import json
+from search import linear_search, binary_search
 
-# Linear search (works on any list)
-result, comparisons = linear_search(cities, "Houston")
-print(f"Found: {result['name']}, Comparisons: {comparisons}")
-# Output: Found: Houston, Comparisons: 3
 
-# Binary search (requires sorted list)
-sorted_cities = sorted(cities, key=lambda x: x["name"].lower())
-result, comparisons = binary_search(sorted_cities, "Houston")
-print(f"Found: {result['name']}, Comparisons: {comparisons}")
-# Output: Found: Houston, Comparisons: 2
+def load_cities(filename: str) -> list:
+    """Load cities from JSON file."""
+    try:
+        with open(filename, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print(f"Error: {filename} not found!")
+        return []
+    except json.JSONDecodeError:
+        print(f"Error: Invalid JSON in {filename}!")
+        return []
+
+
+def main():
+    # Load city data
+    cities = load_cities('../data/cities.json')
+    if not cities:
+        return
+    
+    print(f"Loaded {len(cities)} cities\n")
+    print("=" * 50)
+    
+    # Test city to search for
+    test_city = "Plano"
+    
+    # LINEAR SEARCH (works on unsorted data)
+    print(f"\nSearching for '{test_city}' using Linear Search...")
+    result = linear_search(cities, test_city)
+    if result:
+        print(f"  Found: {result['name']}, Population: {result['population']:,}")
+    
+    # BINARY SEARCH (requires sorted data)
+    print(f"\nSorting cities alphabetically...")
+    cities_sorted = sorted(cities, key=lambda x: x['name'].lower())
+    
+    print(f"\nSearching for '{test_city}' using Binary Search...")
+    result = binary_search(cities_sorted, test_city)
+    if result:
+        print(f"  Found: {result['name']}, Population: {result['population']:,}")
+    
+    # Compare with a city at the end of the alphabet
+    print("\n" + "=" * 50)
+    test_city2 = "San Antonio"
+    
+    print(f"\nSearching for '{test_city2}' (near end of sorted list)...")
+    print("\nLinear Search:")
+    linear_search(cities, test_city2)
+    
+    print("\nBinary Search:")
+    binary_search(cities_sorted, test_city2)
+    
+    # Test non-existent city
+    print("\n" + "=" * 50)
+    print("\nSearching for 'Springfield' (doesn't exist)...")
+    print("\nLinear Search:")
+    linear_search(cities, "Springfield")
+    
+    print("\nBinary Search:")
+    binary_search(cities_sorted, "Springfield")
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 ---
 
-## Testing
-Run the tests to verify your implementation:
-```bash
-python -m pytest tests/ -v
+## 5. Expected Output
+
+```
+Loaded 20 cities
+
+==================================================
+
+Searching for 'Plano' using Linear Search...
+Linear Search: Found in 9 comparisons (0.0234 ms)
+  Found: Plano, Population: 287,677
+
+Sorting cities alphabetically...
+
+Searching for 'Plano' using Binary Search...
+Binary Search: Found in 4 comparisons (0.0089 ms)
+  Found: Plano, Population: 287,677
+
+==================================================
+
+Searching for 'San Antonio' (near end of sorted list)...
+
+Linear Search:
+Linear Search: Found in 4 comparisons (0.0156 ms)
+
+Binary Search:
+Binary Search: Found in 3 comparisons (0.0067 ms)
+
+==================================================
+
+Searching for 'Springfield' (doesn't exist)...
+
+Linear Search:
+Linear Search: Not found after 20 comparisons (0.0312 ms)
+
+Binary Search:
+Binary Search: Not found after 5 comparisons (0.0078 ms)
 ```
 
-## Submission
-Commit and push your completed `search.py` file.
+---
+
+## 6. Lab Report Template
+
+Create `README.md` in your lab folder:
+
+```markdown
+# Lab 1: Binary Search
+
+## Student Information
+- **Name:** [Your Name]
+- **Date:** [Date]
+
+## Algorithm Summary
+
+### Linear Search
+- **How it works:** [Your explanation]
+- **Time Complexity:** O(n)
+- **Best for:** [When to use]
+
+### Binary Search  
+- **How it works:** [Your explanation]
+- **Time Complexity:** O(log n)
+- **Requirement:** Data must be sorted
+- **Best for:** [When to use]
+
+## Test Results
+
+| Search Term | Linear (comparisons) | Binary (comparisons) |
+|-------------|---------------------|---------------------|
+| Plano       |                     |                     |
+| San Antonio |                     |                     |
+| Springfield |                     |                     |
+
+## Reflection Questions
+
+1. Why is binary search faster than linear search?
+
+2. What is the tradeoff of using binary search?
+
+3. If you had 1 million cities, approximately how many comparisons would each algorithm need in the worst case?
+
+## Challenges Encountered
+[Describe any issues and how you resolved them]
+```
+
+---
+
+## 7. Submission
+
+1. Ensure all files are saved in `lab01_binary_search/`
+2. Complete your lab README
+3. Commit and push to GitHub
+4. Continue to Lab 2!
